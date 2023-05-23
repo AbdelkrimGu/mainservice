@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8050
 
 # Set the command to run your API when the container starts
-CMD [ "npm" , "run" , "start" ]
+CMD [ "node" ,"index.js" ]
