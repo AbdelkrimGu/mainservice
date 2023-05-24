@@ -72,7 +72,7 @@ router.post("/balance/add" , async(req,res)=>{
             });
 
         }
-        
+        console.log(checkoutUrl);
         console.log("done");
 
         res.json({url : checkoutUrl});   
