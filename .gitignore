@@ -1,3 +1,7 @@
-/node_modules
+# Ignore all folders within node_modules
+/node_modules/*
+
+# Include a specific folder within node_modules
+!/node_modules/chargily-epay-gateway/
 
 .env
