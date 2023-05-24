@@ -8,8 +8,8 @@ const Student = require("../Models/Student");
 const Enrollement = require("../Models/Enrollement");
 const Teacher = require('../Models/Teacher');
 
-//const chargily = require('chargily-epay-gateway');
-const dotenv = require('dotenv');
+const chargily = require('chargily-epay-gateway');
+//const dotenv = require('dotenv');
 const {Invoice, Mode} = require("chargily-epay-gateway/lib/configuration");
 
 const apiKey = "api_qCIJq19juHSIXa3t3v8YsvqOeqKOXsLJv0luyAFYxekj4mvL3iNbDsm2tlXd2sd2";
@@ -22,7 +22,7 @@ const url = 'https://userservice-production-dd99.up.railway.app'
 router.post("/balance/add" , async(req,res)=>{
     try {
         console.log("object");
-        console.log(dotenv.config());
+        //console.log(dotenv.config());
 
         const user = await JwtVerifier.student(req.headers.authorization.split(' ')[1]);
         let student = await Student.findById(user.id);
@@ -48,9 +48,22 @@ router.post("/balance/add" , async(req,res)=>{
         order.clientEmail = user.email // email of customer where he will receive the Bill
         order.appKey = apiKey 
 
-        const checkoutUrl = chargily.createPayment(order).then( resp => {
-            return res.json({url : resp.checkout_url}) // redirect to this url to proccess the checkout 
-        });
+        let b = true;
+        let checkoutUrl;
+
+        while(b){
+            checkoutUrl = await chargily.createPayment(order).then( resp => {
+                b = false; 
+                return resp.checkout_url; // redirect to this url to proccess the checkout 
+            }).catch((err)=>{
+                console.log(err);
+            });
+
+        }
+        
+        console.log("done");
+
+        res.json({url : checkoutUrl});   
         
         
         
