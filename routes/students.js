@@ -8,15 +8,15 @@ const Student = require("../Models/Student");
 const Enrollement = require("../Models/Enrollement");
 const Teacher = require('../Models/Teacher');
 
-const chargily = require('chargily-epay-gateway');
-const dotenv = require('dotenv');
-const {Invoice, Mode} = require("chargily-epay-gateway/lib/configuration");
+//const chargily = require('chargily-epay-gateway');
+//const dotenv = require('dotenv');
+//const {Invoice, Mode} = require("chargily-epay-gateway/lib/configuration");
 
 const apiKey = "api_qCIJq19juHSIXa3t3v8YsvqOeqKOXsLJv0luyAFYxekj4mvL3iNbDsm2tlXd2sd2";
 const secretKey = "secret_eec1a65564e43e4ffa340a1d2db115bb7a695842e3877e3ea35e7cd07f6bee24";
 const url = 'https://userservicedockerised.onrender.com'
 
-dotenv.config();
+//dotenv.config();
 
 
 router.post("/balance/add" , async(req,res)=>{
