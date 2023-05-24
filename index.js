@@ -18,7 +18,7 @@ app.use(cors());
 // Middleware function to log requests
 const requestLogger = (req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log(req);
+  console.log(req.body);
   next();
 };
 
