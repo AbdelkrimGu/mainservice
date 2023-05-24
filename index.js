@@ -4,20 +4,20 @@ const app = express();
 const cors = require('cors');
 
 
-const allowedOrigins = ['http://127.0.0.1:5501', 'https://e87c-105-235-138-153.ngrok-free.app' , "http://172.20.10.2:4200"];
+//const allowedOrigins = ['http://127.0.0.1:5501', 'https://e87c-105-235-138-153.ngrok-free.app' , "http://172.20.10.2:4200"];
 const requestLogger = (req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
   next();
 };
 
-app.use(cors({
+/*app.use(cors({
   origin: allowedOrigins,
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials : true,
-}));
+}));*/
 
-//app.use(cors());
+app.use(cors());
 
 // Middleware function to log requests
 
