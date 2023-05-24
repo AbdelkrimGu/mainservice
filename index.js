@@ -15,6 +15,16 @@ const allowedOrigins = ['http://127.0.0.1:5501', 'https://e87c-105-235-138-153.n
 
 app.use(cors());
 
+// Middleware function to log requests
+const requestLogger = (req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  console.log(req);
+  next();
+};
+
+// Apply the middleware globally to log all requests
+app.use(requestLogger);
+
 port = 8050;
 
 const courseRouter = require("./routes/courses");
