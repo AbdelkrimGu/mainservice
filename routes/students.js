@@ -62,7 +62,8 @@ router.post("/balance/add" , async(req,res)=>{
 
         while(b){
             checkoutUrl = await chargily.createPayment(order).then( resp => {
-                b = false; 
+                b = false;
+                
                 return resp.checkout_url; // redirect to this url to proccess the checkout 
             }).catch((err)=>{
                 console.log(err);
