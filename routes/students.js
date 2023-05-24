@@ -9,14 +9,12 @@ const Enrollement = require("../Models/Enrollement");
 const Teacher = require('../Models/Teacher');
 
 
-//const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 const {Invoice, Mode} = require("chargily-epay-gateway/lib/configuration");
 
-const apiKey = "api_qCIJq19juHSIXa3t3v8YsvqOeqKOXsLJv0luyAFYxekj4mvL3iNbDsm2tlXd2sd2";
-const secretKey = "secret_eec1a65564e43e4ffa340a1d2db115bb7a695842e3877e3ea35e7cd07f6bee24";
 const url = 'https://userservice-production-dd99.up.railway.app'
 
-//dotenv.config();
+dotenv.config();
 
 
 router.post("/balance/add" , async(req,res)=>{
@@ -30,13 +28,14 @@ router.post("/balance/add" , async(req,res)=>{
         res.status(401).json(error.message);
     }
     try {
+        console.log(process.env.CHARGILY_APP_KEY);
         
         console.log("object");
         //console.log(dotenv.config());
 
         const user = await JwtVerifier.student(req.headers.authorization.split(' ')[1]);
         let student = await Student.findById(user.id);
-        let amount = req.body.amount;
+        let amount = intVal(req.body.amount);
         if (!student) {
             const newStudent = new Student({
                 _id: user.id,
@@ -56,7 +55,7 @@ router.post("/balance/add" , async(req,res)=>{
         order.client = user.nom + " " + user.prenom 
         order.discount = 0 // by percentage between [0, 100]
         order.clientEmail = user.email // email of customer where he will receive the Bill
-        order.appKey = apiKey 
+        order.appKey = process.env.CHARGILY_APP_KEY; 
 
         let b = true;
         let checkoutUrl;

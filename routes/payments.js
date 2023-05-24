@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const {DefaultSignatureValidator} = require("chargily-epay-gateway/lib/Webhook");
 
+
+const dotenv = require('dotenv');
+dotenv.config();
 const Paiement = require('../Models/Paiement');
 
 
@@ -28,7 +32,29 @@ router.get("/webhook", async (req,res) => {
     });
     console.log(paiement);
     await paiement.save();
-    res.json({message : "accepted"});
+
+
+    let secret = process.env.CHARGILY_APP_SECRET
+    console.log(process.env.CHARGILY_APP_SECRET);
+
+
+    let signature = req.header('Signature');
+
+    let rs = false;
+
+
+    try{
+        rs = DefaultSignatureValidator.isValid(
+            signature, 
+            secret,
+            req.body);
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(401).json(error.message);
+    };
+     // return boolean
+    res.json({message : rs});
 });
 
 
