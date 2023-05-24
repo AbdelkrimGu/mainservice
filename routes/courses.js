@@ -157,8 +157,8 @@ router.get("/:courseId" , async(req,res)=>{
             //console.log(object);
         })
         .catch((error) => {
+            return res.status(401).json(error);
         });
-        return res.json(course);
         
     } catch (error) {
         console.log(error);
