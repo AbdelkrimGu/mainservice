@@ -57,19 +57,15 @@ router.post("/balance/add" , async(req,res)=>{
         order.clientEmail = user.email // email of customer where he will receive the Bill
         order.appKey = process.env.CHARGILY_APP_KEY; 
 
-        let b = 0;
+        let b = true;
         let checkoutUrl;
 
-        while(b < 5){
-            checkoutUrl = await chargily.createPayment(order).then( resp => { 
+        while(b){
+            checkoutUrl = await chargily.createPayment(order).then( resp => {
+                b = false; 
                 return resp.checkout_url; // redirect to this url to proccess the checkout 
             }).catch((err)=>{
-                b++;
                 console.log(err);
-                if (b == 5){
-                    return res.status(401).json(error.message);
-                }
-                
             });
 
         }
