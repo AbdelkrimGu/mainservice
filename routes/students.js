@@ -8,7 +8,7 @@ const Student = require("../Models/Student");
 const Enrollement = require("../Models/Enrollement");
 const Teacher = require('../Models/Teacher');
 
-const chargily = require('chargily-epay-gateway/lib/index');
+const chargily = require('chargily-epay-gateway');
 //const dotenv = require('dotenv');
 const {Invoice, Mode} = require("chargily-epay-gateway/lib/configuration");
 
