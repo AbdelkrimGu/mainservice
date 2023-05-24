@@ -35,7 +35,8 @@ router.post("/balance/add" , async(req,res)=>{
 
         const user = await JwtVerifier.student(req.headers.authorization.split(' ')[1]);
         let student = await Student.findById(user.id);
-        let amount = parseInt(req.body.cardamount);
+        let amount = req.body.cardamount;
+        console.log(req.body.cardamount);
         console.log(amount);
         if (!student) {
             const newStudent = new Student({
