@@ -23,7 +23,6 @@ router.get("/front", async (req,res) => {
 
 
 router.get("/webhook", async (req,res) => {
-    console.log(req);
     console.log(req.body);
     const myObjectString = JSON.stringify(req.body);
     let paiement = new Paiement({
@@ -39,6 +38,7 @@ router.get("/webhook", async (req,res) => {
 
 
     let signature = req.header('Signature');
+    console.log(signature);
 
     let rs = false;
 

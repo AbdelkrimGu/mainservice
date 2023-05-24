@@ -277,8 +277,9 @@ router.get("/cours/:courseId" , async(req,res)=>{
                 //console.log(object);
             })
             .catch((error) => {
+                return res.status(401).json({message:"error du user service"}); 
             });
-            return res.json(course);
+            //return res.json(course);
         }else{
             return res.status(402).json({message:"tu fait pas partie du groupe de ce cours"});
         }
