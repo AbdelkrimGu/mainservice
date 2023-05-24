@@ -35,7 +35,8 @@ router.post("/balance/add" , async(req,res)=>{
 
         const user = await JwtVerifier.student(req.headers.authorization.split(' ')[1]);
         let student = await Student.findById(user.id);
-        let amount = parseInt(req.body.amount);
+        let amount = parseInt(req.body.cardamount);
+        console.log(amount);
         if (!student) {
             const newStudent = new Student({
                 _id: user.id,
@@ -63,7 +64,7 @@ router.post("/balance/add" , async(req,res)=>{
         while(b){
             checkoutUrl = await chargily.createPayment(order).then( resp => {
                 b = false;
-                
+
                 return resp.checkout_url; // redirect to this url to proccess the checkout 
             }).catch((err)=>{
                 console.log(err);
