@@ -7,6 +7,7 @@ const Course = require("../Models/Course");
 const Student = require("../Models/Student");
 const Enrollement = require("../Models/Enrollement");
 const Teacher = require('../Models/Teacher');
+const Paiement = require('../Models/Paiement')
 
 
 const dotenv = require('dotenv');
@@ -48,15 +49,27 @@ router.post("/balance/add" , async(req,res)=>{
             });
             await newStudent.save();
         }
+        const updatedStudent = await Student.findOne({_id : user.id}).populate('enrollements');
+
+        let paiement = new Paiement({
+            mode : Mode.EDAHABIA,
+            amount : amount,
+            client : user.id,
+            clientEmail : user.email,
+            status : 'unpaid',
+            etat : "open"
+        });
+
+        await paiement.save();
         const order = new Invoice()
-        order.invoiceNumber = "100" // must be integer or string
-        order.mode = Mode.EDAHABIA // or Mode.CIB
+        order.invoiceNumber = paiement._id // must be integer or string
+        order.mode = paiement.mode // or Mode.CIB
         order.backUrl = "https://saned-v5.netlify.app/#/espace-etudiant/profile?state=accepted" // must be a valid and active URL
-        order.amount = amount // must be integer , and more or equal 75
+        order.amount = paiement.amount // must be integer , and more or equal 75
         order.webhookUrl = "https://secondservice.onrender.com/api/paiement/webhook" // this URL where receive the response 
         order.client = user.nom + " " + user.prenom 
         order.discount = 0 // by percentage between [0, 100]
-        order.clientEmail = user.email // email of customer where he will receive the Bill
+        order.clientEmail = paiement.clientEmail // email of customer where he will receive the Bill
         order.appKey = process.env.CHARGILY_APP_KEY; 
 
         let b = true;

@@ -7,6 +7,7 @@ const cors = require('cors');
 //const allowedOrigins = ['http://127.0.0.1:5501', 'https://e87c-105-235-138-153.ngrok-free.app' , "http://172.20.10.2:4200"];
 const requestLogger = (req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
+  console.log(req.body);
   next();
 };
 
@@ -46,10 +47,12 @@ app.use("/api/courses" , courseRouter);
 app.use("/api/students" , studentRouter);
 app.use("/api/teachers" , teacherRouter);
 app.use("/api/explore" , exploreRouter);
+
+app.use(express.text());
 app.use("/api/paiement" , paymentRouter);
 
 
 
 
 
-app.listen(port, () => console.log("Server listening on port"+ port + "!"))
+app.listen(port, () => console.log("Server listening on port "+ port + "!"))

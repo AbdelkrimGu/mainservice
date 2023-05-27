@@ -3,8 +3,12 @@ const Schema = mongoose.Schema;
 const model = mongoose.model;
 
 const paiementSchema = Schema({
-    contenu : {type : String, required : true},
-    from : {type : String , required : true},
+    mode : {type : String , required : true},
+    amount : {type : Number , required : true}, 
+    client : {type : Number , ref : "Student", required : true} ,
+    clientEmail : {type : String , required : true},
+    status : {type : String , required : true},
+    etat : {type : String , required : true}
 });
 
 const Paiement = model("Paiement" , paiementSchema);
