@@ -8,6 +8,7 @@ const courseSchema = Schema({
     presents: [{type : Number, ref : "Student"}],
     absents: [{type : Number , ref : "Student"}],
     token : { type: String },
+    chat : { type : String},
     plan : {type : String},
     piecesjointes: [{type : Schema.Types.ObjectId , ref : "PieceJointe" , required : true}],
     dateTime: {type: String, required: true },

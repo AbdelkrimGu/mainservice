@@ -8,10 +8,18 @@ const Course = require("../Models/Course");
 const Student = require("../Models/Student");
 const Enrollement = require("../Models/Enrollement");
 const PieceJointe = require("../Models/PieceJointe");
-const {RtcTokenBuilder, RtcRole} = require("agora-token");
+const {RtcTokenBuilder, RtcRole , ChatTokenBuilder } = require("agora-token");
 const fileUploader = require("../functions/BackBlaze");
+
+
 const appID = '8f6e8de6a56448ddb685f1a335a2d81a';
 const appCertificate = '7224990ecc4f4c5eaae02b5525633470';
+
+
+const appChat = '1e71ab8f6f6d4965bd3ec4741fc62d59';
+const appCertificateChat = 'ba309dd519bb4be0b2df6cec8858b5ae';
+
+
 const multer = require('multer');
 const role = RtcRole.PUBLISHER;
 
@@ -218,15 +226,18 @@ router.get('/start/:courseId' , async(req,res)=>{
 
             
             const channelName = courseId;
-            const uid = user.id;
             const token = RtcTokenBuilder.buildTokenWithUid(appID, appCertificate, channelName, 0, role, privilegeExpiredTs);
+            const appToken = ChatTokenBuilder.buildAppToken(appChat, appCertificateChat, privilegeExpiredTs);
             console.log("Token With Integer Number Uid: " + token);
             course.token = token;
+            course.chat = appToken;
             await course.save();
+
+            const userToken = ChatTokenBuilder.buildUserToken(appChat, appCertificateChat, user.id, privilegeExpiredTs);
             
             
             // Send a boolean value indicating whether the course exists or not
-            res.json({ exists: course !== null , token : course.token });            
+            res.json({ exists: course !== null , token : course.token , chatToken : course.token , userToken : userToken });            
         }
         else{
             res.status(403).json({exists : false});
@@ -283,7 +294,7 @@ router.get('/join/:courseId' , async(req,res)=>{
 
                 let teacher = await Teacher.findById(course.teacher);
                 console.log(teacher.revenue);
-                teacher.revenue += course.group.pricePerLecture;
+                teacher.revenue += parseInt(course.group.pricePerLecture);
 
                 await teacher.save();
                 console.log(teacher.revenue);
@@ -294,7 +305,8 @@ router.get('/join/:courseId' , async(req,res)=>{
                 // Save the course instance with the updated presents array
                 await course.save();
                 console.log(course.token);
-                return res.status(200).send({ isStudentInCourseGroup: true , token : course.token });
+                const userToken = ChatTokenBuilder.buildUserToken(appChat, appCertificateChat, user.id, privilegeExpiredTs);
+                return res.status(200).send({ isStudentInCourseGroup: true , token : course.token , userToken : userToken});
             }
             
         } else { 

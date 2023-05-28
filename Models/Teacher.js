@@ -6,7 +6,7 @@ const teacherSchema = Schema({
     _id : {type : Number , required : true },
     groups : [{type : Schema.Types.ObjectId ,ref : "Group" , required : true}],
     enrollements : [{type : Schema.Types.ObjectId ,ref : "Enrollement" , required : true}],
-    revenue : {type : Schema.Types.Decimal128 , default : 0},
+    revenue : {type : Number , default : 0},
 });
 
 const Teacher = model("Teacher" , teacherSchema);
