@@ -229,7 +229,6 @@ router.get('/start/:courseId' , async(req,res)=>{
             const token = RtcTokenBuilder.buildTokenWithUid(appID, appCertificate, channelName, 0, role, privilegeExpiredTs);
             console.log("Token With Integer Number Uid: " + token);
             course.token = token;
-            course.chat = appToken;
             await course.save();
             
             
