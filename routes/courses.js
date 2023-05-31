@@ -227,17 +227,14 @@ router.get('/start/:courseId' , async(req,res)=>{
             
             const channelName = courseId;
             const token = RtcTokenBuilder.buildTokenWithUid(appID, appCertificate, channelName, 0, role, privilegeExpiredTs);
-            const appToken = ChatTokenBuilder.buildAppToken(appChat, appCertificateChat, privilegeExpiredTs);
             console.log("Token With Integer Number Uid: " + token);
             course.token = token;
             course.chat = appToken;
             await course.save();
-
-            const userToken = ChatTokenBuilder.buildUserToken(appChat, appCertificateChat, user.id, privilegeExpiredTs);
             
             
             // Send a boolean value indicating whether the course exists or not
-            res.json({ exists: course !== null , token : course.token , chatToken : course.token , userToken : userToken });            
+            res.json({ exists: course !== null , token : course.token });            
         }
         else{
             res.status(403).json({exists : false});
@@ -305,8 +302,7 @@ router.get('/join/:courseId' , async(req,res)=>{
                 // Save the course instance with the updated presents array
                 await course.save();
                 console.log(course.token);
-                const userToken = ChatTokenBuilder.buildUserToken(appChat, appCertificateChat, user.id, privilegeExpiredTs);
-                return res.status(200).send({ isStudentInCourseGroup: true , token : course.token , userToken : userToken});
+                return res.status(200).send({ isStudentInCourseGroup: true , token : course.token });
             }
             
         } else { 
