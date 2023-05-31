@@ -152,7 +152,7 @@ router.get("/:courseId" , async(req,res)=>{
         teacher = await Teacher.findOne({_id : user.id});
         const courseId = req.params.courseId;
         // Find all courses associated with the given teacher ID
-        const course = await Course.findOne({_id : courseId, teacher: teacher._id }).populate('teacher group presents absents');
+        const course = await Course.findOne({_id : courseId, teacher: teacher._id }).populate('teacher group presents absents piecesjointes');
 
         let students = course.group.students;
         // Send the courses in the response
