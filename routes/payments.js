@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const Paiement = require('../Models/Paiement');
 const Student = require('../Models/Student');
+const Check = require('../Models/Check');
 
 
 router.get("/front", async (req,res) => {
@@ -33,6 +34,12 @@ router.post("/webhook", async (req,res) => {
 
         let signature = req.header('Signature');
         console.log(signature);
+
+        let check = new Check({
+            content : req.body
+        });
+
+        await check.save();
 
         rs = DefaultSignatureValidator.isValid(
             signature, 
