@@ -53,7 +53,7 @@ router.post("/create" , upload.array('files'), async(req,res)=>{
         // Find the student again to make sure we have the latest version
         teacher = await Teacher.findOne({_id : user.id});
         // Extract the necessary values from the request body
-        const {  group, time ,plan } = req.body;
+        const {  group, time ,plan , nom } = req.body;
 
         // Create a new Course instance
         const course = new Course({
@@ -63,6 +63,7 @@ router.post("/create" , upload.array('files'), async(req,res)=>{
             absents: [],
             piecesjointes : [],
             plan : plan,
+            nom : nom,
             dateTime: time,
             status: "prochainement"
         });
