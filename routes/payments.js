@@ -28,18 +28,41 @@ router.post("/webhook", async (req,res) => {
     //console.log(req.body);
 
     try{
+        let check = new Check({
+            content : req.body
+        });
+
+        await check.save();
+    }catch{
+        console.log("body not text as expected");
+        try{
+            let check = new Check({
+                content : JSON.stringify(req.body)
+            });
+    
+            await check.save();
+        }
+        catch{
+            console.log("won't work top");
+        }
+
+    }
+
+    try{
+        console.log(req.body.invoice.invoice_number);
+    }
+    catch {
+        console.log("no payment id");
+    }
+
+    try{
         let secret = process.env.CHARGILY_APP_SECRET
         console.log(process.env.CHARGILY_APP_SECRET);
 
 
         let signature = req.header('Signature');
         console.log(signature);
-
-        let check = new Check({
-            content : req.body
-        });
-
-        await check.save();
+        
 
         rs = DefaultSignatureValidator.isValid(
             signature, 
