@@ -233,7 +233,17 @@ router.get("/cours" , async(req,res)=>{
 
         for (let i = 0; i < courses.length; i++) {
             const course = await Course.findById(courses[i]).populate('group teacher');
-            specialVariable.push(course);
+            let teacher = await axios.get(url + "/api/v1/open/teacher?id=" + course.teacher._id)
+            .then(async (response) => {
+                let data = response.data;
+                //data.groups = teacher.groups;
+                return data;
+                //console.log(object);
+            })
+            .catch((error) => {
+                return null;
+            });
+            specialVariable.push({course,teacher});
         }
           // Do something with the courses array
         
