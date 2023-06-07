@@ -232,7 +232,7 @@ router.get("/cours" , async(req,res)=>{
         const specialVariable = [];
 
         for (let i = 0; i < courses.length; i++) {
-            const course = await Course.findById(courses[i]);
+            const course = await Course.findById(courses[i]).populate('group teacher');
             specialVariable.push(course);
         }
           // Do something with the courses array
