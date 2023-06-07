@@ -64,7 +64,7 @@ router.post("/balance/add" , async(req,res)=>{
         const order = new Invoice()
         order.invoiceNumber = paiement._id // must be integer or string
         order.mode = paiement.mode // or Mode.CIB
-        order.backUrl = "https://saned-v5.netlify.app/#/espace-etudiant/profile?state=accepted" // must be a valid and active URL
+        order.backUrl = "https://saned-final.netlify.app/espace-etudiant?state=accepted" // must be a valid and active URL
         order.amount = paiement.amount // must be integer , and more or equal 75
         order.webhookUrl = "https://secondservice.onrender.com/api/paiement/webhook" // this URL where receive the response 
         order.client = user.nom + " " + user.prenom 
