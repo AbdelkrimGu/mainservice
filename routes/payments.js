@@ -62,36 +62,41 @@ router.post("/webhook", async (req,res) => {
 
         let signature = req.header('Signature');
         console.log(signature);
-        
 
-        rs = DefaultSignatureValidator.isValid(
-            signature, 
-            secret,
-            req.body.replace(/^'|'$/g, ''));
-        
-        if (rs){
-            const jsonData = JSON.parse(req.body.replace(/^'|'$/g, ''));
-            const invoice = jsonData.invoice;
-            console.log(jsonData.invoice);
-            console.log(invoice.invoice_number);
-
-            let paiement = await Paiement.findById(invoice.invoice_number);
-
-            paiement.status = invoice.status;
-
-            if (paiement.status === 'paid'){
-                console.log("in paid");
-                let student = await Student.findById(paiement.client);
-                console.log(student);
-                student.balance += parseInt(paiement.amount);
-                paiement.etat = "closed";
-                await student.save();
-                console.log(student.balance);
-                await paiement.save();
-            }
+        try {
+            let rs = DefaultSignatureValidator.isValid(
+                signature, 
+                secret,
+                req.body);
+            console.log(rs);
+            
+        }catch{
+            console.log("didn't sign correctly");
         }
+        
+        
+        //const jsonData = JSON.parse(req.body.replace(/^'|'$/g, ''));
+        const invoice = req.body.invoice;
+        //console.log(jsonData.invoice);
+        console.log(invoice.invoice_number);
 
-        res.send({message : rs});
+        let paiement = await Paiement.findById(invoice.invoice_number);
+
+        paiement.status = invoice.status;
+
+        if (paiement.status === 'paid'){
+            console.log("in paid");
+            let student = await Student.findById(paiement.client);
+            console.log(student);
+            student.balance += parseInt(paiement.amount);
+            paiement.etat = "closed";
+            await student.save();
+            console.log(student.balance);
+            await paiement.save();
+        }
+        
+
+        res.send({message : "paid"});
 
     }catch (err){
         console.log(err);
