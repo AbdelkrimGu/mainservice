@@ -55,6 +55,8 @@ router.post("/accept" , async(req,res)=>{
                 console.error("Error while adding new student to group:", error);
                 res.status(401).json(error);
             });
+
+            createConversation(req.headers.authorization.split(' ')[1],enrollement.student);
         }
         
     } catch (error) {
@@ -216,6 +218,31 @@ async function addExtraInfo(firstList, secondList) {
       }
     }
     return thirdList;
+}
+
+async function createConversation(jwt , student){
+    const url = 'https://messagerieservice.onrender.com/api/conversations';
+    const receiverId = student;
+    const token = jwt;
+
+    const data = {
+        receiverId: receiverId
+    };
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    axios.post(url, data, config)
+    .then(response => {
+        console.log('Response:', response.data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 

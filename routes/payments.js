@@ -67,7 +67,7 @@ router.post("/webhook", async (req,res) => {
             let rs = DefaultSignatureValidator.isValid(
                 signature, 
                 secret,
-                req.body);
+                JSON.stringify(req.body));
             console.log(rs);
             
         }catch{
